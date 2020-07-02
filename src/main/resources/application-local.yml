@@ -1,0 +1,50 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: seckill
+
+  #datasource
+  datasource:
+    #配置当前要使用的数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/activiti?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: root
+    password: chenxin520
+  #druid监控配置
+    filters: stat,wall,log4j
+    #数据库连接池的最小维持连接数
+    dbcp2:
+      min-idle: 5
+      initial-size: 5
+      max-total: 5
+      max-wait-millis: 200
+    #空闲时连接检测（默认开启）
+    test-while-idle: true
+    validation-query: SELECT 1
+
+  #rabbitMq 配置
+  rabbitmq:
+    addresses: 127.0.0.1
+    port: 15672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        concurrency: 10
+        max-concurrency: 10
+        prefetch: 1
+        auto-startup: true
+         # 配置该消费者的ack方式为手动
+        acknowledge-mode: manual
+    #消息发送到交换机确认机制,是否确认回调
+    publisher-confirms: true
+    #消息发送到交换机确认机制,是否返回回馈
+    publisher-returns: true
+mybatis:
+  mapperLocations: classpath:mybatis/*.xml
+
+#用于@Value注入
+jedisCluster:
+  pool: 127.0.0.1:6379||127.0.0.1:6380||127.0.0.1:6381
