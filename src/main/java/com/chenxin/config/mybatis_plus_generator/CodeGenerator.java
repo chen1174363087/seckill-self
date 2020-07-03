@@ -39,7 +39,7 @@ public class CodeGenerator {
         System.out.println(help.toString());
         if (scanner.hasNext()) {
             String ipt = scanner.next();
-            if (!StringUtils.isBlank(ipt)) {
+            if (!StringUtils.isEmpty(ipt)) {
                 return ipt;
             }
         }
@@ -61,9 +61,9 @@ public class CodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl(mysqlUrl);
+        dsc.setUrl("jdbc:mysql://localhost:3306/seckillse?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true");
         // dsc.setSchemaName("public");
-        dsc.setDriverName("com.mysql.jdbc.Driver");
+        dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("chenxin520");
         mpg.setDataSource(dsc);
@@ -71,7 +71,7 @@ public class CodeGenerator {
         // 包配置
         final PackageConfig pc = new PackageConfig();
         pc.setModuleName(scanner("模块名"));
-        pc.setParent("com.chenxin.mybatis-plus.test");
+        pc.setParent("com.chenxin");
         mpg.setPackageInfo(pc);
 
         // 自定义配置

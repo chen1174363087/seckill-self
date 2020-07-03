@@ -30,21 +30,21 @@ public class JedisConfig {
         return jedis;
     }
 
-    @Bean
-    public JedisCluster jedisCluster() {
-        Set<HostAndPort> hostAndPorts = new HashSet<>();
-        String[] hostAndportsArr = this.jedisCluster.split("\\|\\|");
-        for (String hostAndPort : hostAndportsArr) {
-            String[] oneHostAndPort = hostAndPort.split(":");
-            HostAndPort hostAndPort1 = new HostAndPort(oneHostAndPort[0], Integer.parseInt(oneHostAndPort[1]));
-            hostAndPorts.add(hostAndPort1);
-        }
-        int timeout = 1000 * 10;
-        JedisPoolConfig poolConfig = new JedisPoolConfig();
-        poolConfig.setMaxTotal(20);
-        poolConfig.setMaxIdle(10);
-        poolConfig.setMaxWaitMillis(1000 * 10);
-        poolConfig.setTestOnBorrow(false);
-        return new JedisCluster(hostAndPorts, timeout, poolConfig);
-    }
+//    @Bean
+//    public JedisCluster jedisCluster() {
+//        Set<HostAndPort> hostAndPorts = new HashSet<>();
+//        String[] hostAndportsArr = this.jedisCluster.split("\\|\\|");
+//        for (String hostAndPort : hostAndportsArr) {
+//            String[] oneHostAndPort = hostAndPort.split(":");
+//            HostAndPort hostAndPort1 = new HostAndPort(oneHostAndPort[0], Integer.parseInt(oneHostAndPort[1]));
+//            hostAndPorts.add(hostAndPort1);
+//        }
+//        int timeout = 1000 * 10;
+//        JedisPoolConfig poolConfig = new JedisPoolConfig();
+//        poolConfig.setMaxTotal(20);
+//        poolConfig.setMaxIdle(10);
+//        poolConfig.setMaxWaitMillis(1000 * 10);
+//        poolConfig.setTestOnBorrow(false);
+//        return new JedisCluster(hostAndPorts, timeout, poolConfig);
+//    }
 }
