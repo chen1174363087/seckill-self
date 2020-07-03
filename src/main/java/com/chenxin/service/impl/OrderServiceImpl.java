@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chenxin.dao.OrderMapper;
 import com.chenxin.entity.Order;
 import com.chenxin.service.IOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -17,5 +20,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements IOrderService {
+    @Autowired
+    private OrderMapper orderMapper;
 
+    @Override
+    public int insertBatchSelf(List<Order> entities) throws Exception{
+        return orderMapper.insertBatchSelf(entities);
+    }
 }

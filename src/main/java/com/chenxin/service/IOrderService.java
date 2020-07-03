@@ -3,6 +3,8 @@ package com.chenxin.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.chenxin.entity.Order;
 
+import java.util.List;
+
 /**
  * <p>
  * 订单表 服务类
@@ -12,5 +14,5 @@ import com.chenxin.entity.Order;
  * @since 2020-07-03
  */
 public interface IOrderService extends IService<Order> {
-
+    int insertBatchSelf(List<Order> entities) throws Exception;
 }

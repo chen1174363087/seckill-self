@@ -1,5 +1,6 @@
 package com.chenxin.entity;
 
+import com.chenxin.enums.OrderStatusEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -33,7 +34,7 @@ public class Order implements Serializable {
 
     private String address;
 
-    private String status;
+    private String status = OrderStatusEnum.NOT_PAID.getStatus();
 
     private LocalDateTime createTime;
 

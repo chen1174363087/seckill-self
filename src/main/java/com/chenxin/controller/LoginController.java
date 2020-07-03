@@ -29,15 +29,12 @@ import java.util.Date;
 @RequestMapping("/seckill")
 public class LoginController {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
-    private final String authorization = "token";
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @Autowired
     private IUserService iUserService;
-
-    @Autowired
-    @Qualifier(value = "jedisTemplate")
-//    private JedisCluster jedisCluster;
-    private Jedis jedisTemplate;
 
     @Value("${jwt.prefix}")
     private String jwtPrefix;
@@ -72,17 +69,7 @@ public class LoginController {
             return response;
         }
 
-        String token = JwtUtils.generateToken(userEntity.getUsername(), new Date());
-        String jwtRedisKey = new StringBuilder(jwtPrefix).append(":").append(userEntity.getUsername()).toString();
-        String oldToken = jedisTemplate.get(jwtRedisKey);
-        if (!StringUtils.isEmpty(oldToken)) {
-            jedisTemplate.del(jwtRedisKey);
-        }
-
-        SetParams setParams = new SetParams();
-        setParams.px(expiretime);
-        jedisTemplate.set(jwtRedisKey, token, setParams);
-
+        String token = jwtUtils.generateToken(userEntity.getUsername(), new Date());
         LOGGER.info("username：{}，token：{}", userEntity.getUsername(), token);
         response.put("code", 200);
         response.put("msg", "success");
