@@ -39,6 +39,61 @@ public class MQConfig {
     private MsgSendReturnCallback msgSendReturnCallback;
 
     /**
+     * 死信exchange
+     *
+     * @return
+     */
+    @Bean
+    public FanoutExchange dlxOrder() {
+        return new FanoutExchange(MQConfig.DEAD_LETTER_EXCHANGER);
+    }
+
+    /**
+     * 死信queue
+     *
+     * @return
+     */
+    @Bean
+    public Queue dlxQueueOrder() {
+        return new Queue(MQConfig.DEAD_LETTER_QUEUE);
+    }
+
+    //绑定
+    @Bean
+    public Binding dlxQueueBindOrder() {
+        return BindingBuilder.bind(dlxQueueOrder()).to(dlxOrder());
+    }
+
+
+    /**
+     * Topic模式 交换机Exchange
+     */
+    @Bean
+    public TopicExchange topicExchangeOrder() {
+        return new TopicExchange(MQConfig.ORDER_CANCEL_TOPIC_EXCHANGE, true, false);
+    }
+
+    /**
+     * 死信队列，延迟处理（定时取消订单）
+     *
+     * @return
+     */
+    @Bean
+    public Queue queueOrder() {
+        Map<String, Object> args = new HashMap<>();
+        args.put("x-message-ttl", 20000);
+        args.put("x-dead-letter-exchange", MQConfig.DEAD_LETTER_EXCHANGER);
+        args.put("x-dead-letter-routing-key", MQConfig.DEAD_LETTER_ROUTINGKEY);
+        return new Queue(MQConfig.ORDER_CANCEL_TOPIC_QUEUE, true, false, false, args);
+    }
+
+    //绑定
+    @Bean
+    public Binding topicBinding() {
+        return BindingBuilder.bind(queueOrder()).to(topicExchangeOrder()).with(MQConfig.ORDER_CANCEL_TOPIC_KEY);
+    }
+
+    /**
      * 创建订单消息 Topic模式 交换机Exchange
      */
     @Bean
@@ -57,59 +112,59 @@ public class MQConfig {
         return BindingBuilder.bind(createOrderQueue()).to(createOrderExchange()).with(TOPIC_KEY);
     }
 
-    /**
-     * 处理订单
-     */
-    @Bean
-    public TopicExchange orderCancelExchange() {
-        return new TopicExchange(MQConfig.ORDER_CANCEL_TOPIC_EXCHANGE, true, false);
-    }
-
-    /**
-     * 死信队列，延迟处理（定时取消订单）
-     *
-     * @return
-     */
-    @Bean
-    public Queue orderCancelQueue() {
-        Map<String, Object> args = new HashMap<>();
-        args.put("x-message-ttl", orderExpireTime);
-        args.put("x-dead-letter-exchange", MQConfig.DEAD_LETTER_EXCHANGER);
-        args.put("x-dead-letter-routing-key", MQConfig.DEAD_LETTER_ROUTINGKEY);
-        return new Queue(ORDER_CANCEL_TOPIC_QUEUE, true, false, false, args);
-    }
-
-    //绑定
-    @Bean
-    public Binding orderCancelQueueBind() {
-        return BindingBuilder.bind(createOrderQueue()).to(createOrderExchange()).with(ORDER_CANCEL_TOPIC_KEY);
-    }
-
-    /**
-     * 死信exchange
-     *
-     * @return
-     */
-    @Bean
-    public FanoutExchange orderDlx() {
-        return new FanoutExchange(MQConfig.DEAD_LETTER_EXCHANGER);
-    }
-
-    /**
-     * 死信queue
-     *
-     * @return
-     */
-    @Bean
-    public Queue orderDlxQueue() {
-        return new Queue(MQConfig.DEAD_LETTER_QUEUE);
-    }
-
-    //绑定
-    @Bean
-    public Binding orderDlxQueueBind() {
-        return BindingBuilder.bind(orderDlxQueue()).to(orderDlx());
-    }
+//    /**
+//     * 处理订单
+//     */
+//    @Bean
+//    public TopicExchange orderCancelExchange() {
+//        return new TopicExchange(MQConfig.ORDER_CANCEL_TOPIC_EXCHANGE, true, false);
+//    }
+//
+//    /**
+//     * 死信队列，延迟处理（定时取消订单）
+//     *
+//     * @return
+//     */
+//    @Bean
+//    public Queue orderCancelQueue() {
+//        Map<String, Object> args = new HashMap<>();
+//        args.put("x-message-ttl", orderExpireTime);
+//        args.put("x-dead-letter-exchange", MQConfig.DEAD_LETTER_EXCHANGER);
+//        args.put("x-dead-letter-routing-key", MQConfig.DEAD_LETTER_ROUTINGKEY);
+//        return new Queue(ORDER_CANCEL_TOPIC_QUEUE, true, false, false, args);
+//    }
+//
+//    //绑定
+//    @Bean
+//    public Binding orderCancelQueueBind() {
+//        return BindingBuilder.bind(createOrderQueue()).to(createOrderExchange()).with(ORDER_CANCEL_TOPIC_KEY);
+//    }
+//
+//    /**
+//     * 死信exchange
+//     *
+//     * @return
+//     */
+//    @Bean
+//    public FanoutExchange orderDlx() {
+//        return new FanoutExchange(MQConfig.DEAD_LETTER_EXCHANGER);
+//    }
+//
+//    /**
+//     * 死信queue
+//     *
+//     * @return
+//     */
+//    @Bean
+//    public Queue orderDlxQueue() {
+//        return new Queue(MQConfig.DEAD_LETTER_QUEUE);
+//    }
+//
+//    //绑定
+//    @Bean
+//    public Binding orderDlxQueueBind() {
+//        return BindingBuilder.bind(orderDlxQueue()).to(orderDlx());
+//    }
 
 
     /**

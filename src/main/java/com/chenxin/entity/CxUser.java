@@ -1,17 +1,15 @@
 package com.chenxin.entity;
 
-import com.chenxin.enums.OrderStatusEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-
+import java.util.Date;
 
 /**
  * <p>
- * 订单表
+ * 用户表
  * </p>
  *
  * @author chenxin
@@ -20,23 +18,16 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Order implements Serializable {
+public class CxUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-//    private Long id;
-
-    private Long productId;
+    private Long id;
 
     private String username;
 
-    private String telphone;
+    private String password;
 
-    private String address;
-
-    private String status = OrderStatusEnum.NOT_PAID.getStatus();
-
-    private LocalDateTime createTime;
-
+    private Date createTime;
 
 }

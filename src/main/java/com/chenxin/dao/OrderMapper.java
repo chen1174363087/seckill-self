@@ -1,7 +1,7 @@
 package com.chenxin.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.chenxin.entity.Order;
+import com.chenxin.entity.CxOrder;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -15,6 +15,6 @@ import java.util.List;
  * @since 2020-07-03
  */
 @Mapper
-public interface OrderMapper extends BaseMapper<Order> {
-    int insertBatchSelf(List<Order> entities) throws Exception;
+public interface OrderMapper extends BaseMapper<CxOrder> {
+    int insertBatchSelf(List<CxOrder> entities) throws Exception;
 }

@@ -1,7 +1,7 @@
 package com.chenxin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.chenxin.entity.User;
+import com.chenxin.entity.CxUser;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.chenxin.entity.User;
  * @author chenxin
  * @since 2020-07-03
  */
-public interface IUserService extends IService<User> {
+public interface IUserService extends IService<CxUser> {
 
 }

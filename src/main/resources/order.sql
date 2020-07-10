@@ -1,6 +1,6 @@
-DROP TABLE  IF EXISTS `order`;
-CREATE TABLE `order` (
-  `id` bigint(20) NOT NULL,
+DROP TABLE  IF EXISTS `cx_order`;
+CREATE TABLE `cx_order` (
+  `id` bigint(20) NOT NULL auto_increment,
   `product_id` bigint(20) NOT NULL,
   `username` varchar(50) DEFAULT NULL,
   `telphone` varchar(20) DEFAULT NULL,

@@ -1,10 +1,9 @@
 package com.chenxin.controller;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chenxin.dto.Response;
-import com.chenxin.entity.Order;
-import com.chenxin.entity.User;
+import com.chenxin.entity.CxOrder;
+import com.chenxin.entity.CxUser;
 import com.chenxin.mq.seckill.Producer;
 import com.chenxin.service.IOrderService;
 import com.chenxin.util.JwtUtils;
@@ -46,10 +45,10 @@ public class OrderController {
     private Producer producer;
 
     @PostMapping("/create")
-    public Response createOrder(HttpServletRequest request, @RequestBody Order order) {
+    public Response createOrder(HttpServletRequest request, @RequestBody CxOrder cxOrder) {
         Response response = new Response();
         String token = request.getHeader(TOKEN);
-        if (order == null) {
+        if (cxOrder == null) {
             LOGGER.error("用户为空");
             response.put("code", 200);
             response.put("msg", "用户为空");
@@ -58,12 +57,12 @@ public class OrderController {
 
         //解析token
         Map<String, Object> validateRes = jwtUtils.validateToken(token);
-        if (validateRes.get("username") == null || !validateRes.get("username").equals(order.getUsername())) {
+        if (validateRes.get("username") == null || !validateRes.get("username").equals(cxOrder.getUsername())) {
             response.put("code", 200);
             response.put("msg", "订单信息用户名错误");
             return response;
         }
-        producer.buildCreateOrder(order);
+        producer.buildCreateOrder(cxOrder);
 
         response.put("code", 200);
         response.put("msg", "申请成功，排队中...");
@@ -71,7 +70,7 @@ public class OrderController {
     }
 
     @PostMapping("/list")
-    public Response getOrder(HttpServletRequest request, @RequestBody User user) {
+    public Response getOrder(HttpServletRequest request, @RequestBody CxUser cxUser) {
         Response response = new Response();
         String token = request.getHeader(TOKEN);
         if (StringUtils.isEmpty(token)) {
@@ -81,7 +80,7 @@ public class OrderController {
             return response;
         }
 
-        if (user == null) {
+        if (cxUser == null) {
             LOGGER.error("用户为空");
             response.put("code", 200);
             response.put("msg", "用户为空");
@@ -98,12 +97,12 @@ public class OrderController {
         }
 
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("username", user.getUsername());
-        List<Order> orders = orderService.list(queryWrapper);
+        queryWrapper.eq("username", cxUser.getUsername());
+        List<CxOrder> cxOrders = orderService.list(queryWrapper);
 
         response.put("code", 200);
         response.put("msg", "success");
-        response.put("content", orders);
+        response.put("content", cxOrders);
         return response;
     }
 }

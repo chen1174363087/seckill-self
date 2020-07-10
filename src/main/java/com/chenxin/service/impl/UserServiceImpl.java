@@ -2,7 +2,7 @@ package com.chenxin.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chenxin.dao.UserMapper;
-import com.chenxin.entity.User;
+import com.chenxin.entity.CxUser;
 import com.chenxin.service.IUserService;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-07-03
  */
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, CxUser> implements IUserService {
 
 }

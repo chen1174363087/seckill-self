@@ -1,7 +1,7 @@
 package com.chenxin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.chenxin.entity.Order;
+import com.chenxin.entity.CxOrder;
 
 import java.util.List;
 
@@ -13,6 +13,6 @@ import java.util.List;
  * @author chenxin
  * @since 2020-07-03
  */
-public interface IOrderService extends IService<Order> {
-    int insertBatchSelf(List<Order> entities) throws Exception;
+public interface IOrderService extends IService<CxOrder> {
+    int insertBatchSelf(List<CxOrder> entities) throws Exception;
 }

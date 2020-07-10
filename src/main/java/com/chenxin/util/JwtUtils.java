@@ -2,7 +2,7 @@ package com.chenxin.util;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chenxin.dao.UserMapper;
-import com.chenxin.entity.User;
+import com.chenxin.entity.CxUser;
 import com.chenxin.enums.Constants;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,10 +64,10 @@ public class JwtUtils {
                     resp.put("ERR_MSG", Constants.ERR_MSG_USERNAME_EMPTY);
                     return resp;
                 }
-                QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+                QueryWrapper<CxUser> queryWrapper = new QueryWrapper<>();
                 queryWrapper.eq("username", username);
-                User userEntity = userRepository.selectOne(queryWrapper);
-                if (userEntity == null) {
+                CxUser cxUserEntity = userRepository.selectOne(queryWrapper);
+                if (cxUserEntity == null) {
                     resp.put("ERR_MSG", Constants.ERR_MSG_NOT_A_ACOUNT);
                     return resp;
                 }

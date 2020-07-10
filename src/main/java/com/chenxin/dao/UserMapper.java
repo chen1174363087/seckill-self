@@ -1,7 +1,7 @@
 package com.chenxin.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.chenxin.entity.User;
+import com.chenxin.entity.CxUser;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2020-07-03
  */
 @Mapper
-public interface UserMapper extends BaseMapper<User> {
+public interface UserMapper extends BaseMapper<CxUser> {
 
 }

@@ -1,7 +1,7 @@
 package com.chenxin.mq.seckill;
 
 import com.alibaba.fastjson.JSON;
-import com.chenxin.entity.Order;
+import com.chenxin.entity.CxOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -24,7 +24,7 @@ public class Producer {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void buildCreateOrder(Order order) {
+    public void buildCreateOrder(CxOrder cxOrder) {
         /**
          * 构建Message ,主要是使用 orderId 将 message 和 CorrelationData 关联起来。
          * 这样当消息发送到交换机失败的时候，在 MsgSendConfirmCallBack 中就可以根据
@@ -32,7 +32,7 @@ public class Producer {
          */
         /*将 msgId和 message绑定*/
         String id = UUID.randomUUID().toString();
-        Message message = MessageBuilder.withBody(JSON.toJSONString(order).getBytes())
+        Message message = MessageBuilder.withBody(JSON.toJSONString(cxOrder).getBytes())
                 .setContentType(MessageProperties.CONTENT_TYPE_JSON)
                 .setCorrelationId(id).build();
 
@@ -44,7 +44,7 @@ public class Producer {
         logger.info("MQ send message {} ", new String(message.getBody()));
     }
 
-    public void buildAutoCancelOrder(Order order) {
+    public void buildAutoCancelOrder(CxOrder cxOrder) {
         /**
          * 构建Message ,主要是使用 orderId 将 message 和 CorrelationData 关联起来。
          * 这样当消息发送到交换机失败的时候，在 MsgSendConfirmCallBack 中就可以根据
@@ -52,7 +52,7 @@ public class Producer {
          */
         /*将 msgId和 message绑定*/
         String id = UUID.randomUUID().toString();
-        Message message = MessageBuilder.withBody(JSON.toJSONString(order).getBytes())
+        Message message = MessageBuilder.withBody(JSON.toJSONString(cxOrder).getBytes())
                 .setContentType(MessageProperties.CONTENT_TYPE_JSON)
                 .setCorrelationId(id).build();
 

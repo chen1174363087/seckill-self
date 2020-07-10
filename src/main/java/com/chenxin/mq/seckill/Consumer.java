@@ -1,7 +1,7 @@
 package com.chenxin.mq.seckill;
 
 import com.alibaba.fastjson.JSONObject;
-import com.chenxin.entity.Order;
+import com.chenxin.entity.CxOrder;
 import com.chenxin.enums.OrderStatusEnum;
 import com.chenxin.service.IOrderService;
 import com.rabbitmq.client.Channel;
@@ -41,11 +41,11 @@ public class Consumer {
     @RabbitListener(queues = {MQConfig.TOPIC_QUEUE})
     public void createOrder(Message message, Channel channel) {
         try {
-            Order order = json2Order(message);
-            orderService.insertBatchSelf(Arrays.asList(order));
+            CxOrder cxOrder = json2Order(message);
+            orderService.saveOrUpdate(cxOrder);
 
-            logger.info("MQ 创建订单success, username：{}", order.getUsername());
-            producer.buildAutoCancelOrder(order);
+            logger.info("MQ 创建订单success, username：{}", cxOrder.getUsername());
+            producer.buildAutoCancelOrder(cxOrder);
             /**
              * 第一个参数 deliveryTag：就是接受的消息的deliveryTag,可以通过msg.getMessageProperties().getDeliveryTag()获得
              * 第二个参数 multiple：如果为true，确认之前接受到的消息；如果为false，只确认当前消息。
@@ -81,18 +81,18 @@ public class Consumer {
      */
     @RabbitListener(queues = {MQConfig.DEAD_LETTER_QUEUE})
     public void cancelOrder(Message message, Channel channel) {
-        Order order = null;
+        CxOrder cxOrder = null;
         try {
-            order = json2Order(message);
+            cxOrder = json2Order(message);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        logger.info("定时取消订单：{}", order.getUsername());
+        logger.info("定时取消订单：{}", cxOrder.getUsername());
         try {
-            order.setStatus(OrderStatusEnum.CANCEL.getStatus());
-            orderService.saveOrUpdate(order);
+            cxOrder.setStatus(OrderStatusEnum.CANCEL.getStatus());
+            orderService.saveOrUpdate(cxOrder);
             //向redis加入数据
-//            jedisCluster.lpush("order_list", order.toString());
+//            jedisCluster.lpush("order_list", cxOrder.toString());
 
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), true);//删除消费的消息
         } catch (Exception e) {
@@ -106,9 +106,9 @@ public class Consumer {
         }
     }
 
-    public Order json2Order(Message message) throws UnsupportedEncodingException {
+    public CxOrder json2Order(Message message) throws UnsupportedEncodingException {
         String body = new String(message.getBody(), "utf-8");
-        Order order = JSONObject.parseObject(body, Order.class);
-        return order;
+        CxOrder cxOrder = JSONObject.parseObject(body, CxOrder.class);
+        return cxOrder;
     }
 }

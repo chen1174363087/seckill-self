@@ -1,5 +1,5 @@
- DROP TABLE if EXISTS `user`;
- CREATE TABLE `user` (
+ DROP TABLE if EXISTS `cx_user`;
+ CREATE TABLE `cx_user` (
     `id` bigint(20) NOT NULL auto_increment,
     `username` varchar(50) DEFAULT NULL,
     `password` varchar(50) DEFAULT NULL,
