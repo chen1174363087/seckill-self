@@ -24,6 +24,15 @@ spring:
     #空闲时连接检测（默认开启）
     test-while-idle: true
     validation-query: SELECT 1
+    # 配置日志输出
+    druid:
+      filter:
+        slf4j:
+          enabled: true
+          statement-create-after-log-enabled: false
+          statement-close-after-log-enabled: false
+          result-set-open-after-log-enabled: false
+          result-set-close-after-log-enabled: false
 
   #rabbitMq 配置
   rabbitmq:
