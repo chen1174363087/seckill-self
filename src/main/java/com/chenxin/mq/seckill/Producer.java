@@ -12,6 +12,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 @Component
@@ -41,7 +42,11 @@ public class Producer {
          */
         CorrelationData correlationData = new CorrelationData(id);
         rabbitTemplate.convertAndSend(MQConfig.TOPIC_EXCHANGE, MQConfig.TOPIC_KEY, message, correlationData);
-        logger.info("MQ send message {} ", new String(message.getBody()));
+        try {
+            logger.info("MQ send message {} ", new String(message.getBody(),"UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     public void buildAutoCancelOrder(CxOrder cxOrder) {
@@ -61,6 +66,10 @@ public class Producer {
          */
         CorrelationData correlationData = new CorrelationData(id);
         rabbitTemplate.convertAndSend(MQConfig.ORDER_CANCEL_TOPIC_EXCHANGE, MQConfig.ORDER_CANCEL_TOPIC_KEY, message, correlationData);
-        logger.info("MQ send message {} ", new String(message.getBody()));
+        try {
+            logger.info("MQ send message {} ", new String(message.getBody(),"UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 }

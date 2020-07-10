@@ -16,7 +16,6 @@ import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 
 @Component
 public class Consumer {
@@ -107,7 +106,7 @@ public class Consumer {
     }
 
     public CxOrder json2Order(Message message) throws UnsupportedEncodingException {
-        String body = new String(message.getBody(), "utf-8");
+        String body = new String(message.getBody(), "UTF-8");
         CxOrder cxOrder = JSONObject.parseObject(body, CxOrder.class);
         return cxOrder;
     }
