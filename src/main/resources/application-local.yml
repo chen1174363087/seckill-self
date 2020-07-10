@@ -66,5 +66,6 @@ jwt:
 mybatis-plus:
   mapper-locations: classpath:mybatis/*.xml
 
+#订单自动取消时间限制 10分钟
 order:
-  expire-time: 60
+  expire-time: 600000

@@ -81,7 +81,7 @@ public class MQConfig {
     @Bean
     public Queue queueOrder() {
         Map<String, Object> args = new HashMap<>();
-        args.put("x-message-ttl", 20000);
+        args.put("x-message-ttl", orderExpireTime);
         args.put("x-dead-letter-exchange", MQConfig.DEAD_LETTER_EXCHANGER);
         args.put("x-dead-letter-routing-key", MQConfig.DEAD_LETTER_ROUTINGKEY);
         return new Queue(MQConfig.ORDER_CANCEL_TOPIC_QUEUE, true, false, false, args);
