@@ -2,7 +2,7 @@ package com.chenxin.mq.seckill;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.chenxin.common.CommConfig;
+import com.chenxin.common.CommonUtils;
 import com.chenxin.entity.CxOrder;
 import com.chenxin.enums.OrderStatusEnum;
 import com.chenxin.service.IOrderService;
@@ -55,9 +55,7 @@ public class Consumer {
                 //自动取消订单死信队列
                 producer.buildAutoCancelOrder(cxOrder);
                 //将用户订单信息存redis，供用户查询
-                String orderKey = new StringBuilder("seckill：")
-                        .append(cxOrder.getUsername())
-                        .append(cxOrder.getTelphone()).toString();
+                String orderKey = CommonUtils.getOrderKey(cxOrder);
                 redisUtils.sadd(orderKey, JSON.toJSONString(cxOrder));
             }
 
@@ -110,9 +108,7 @@ public class Consumer {
             cxOrder.setStatus(OrderStatusEnum.CANCEL.getStatus());
             orderService.saveOrUpdate(cxOrder);
             //更新用户订单信息，供用户查询
-            String orderKey = new StringBuilder("seckill：")
-                    .append(cxOrder.getUsername())
-                    .append(cxOrder.getTelphone()).toString();
+            String orderKey = CommonUtils.getOrderKey(cxOrder);
             long deleteNum = redisUtils.srem(orderKey, JSON.toJSONString(oldOrder));
             //在自动取消前可能已支付或者未支付
             if (deleteNum > 0) {//deleteNum > 0 未支付

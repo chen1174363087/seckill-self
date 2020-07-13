@@ -54,7 +54,7 @@ public class OrderController {
         Response response = new Response();
         String token = request.getHeader(TOKEN);
         if (cxOrder == null) {
-            LOGGER.error("用户为空");
+            LOGGER.error("订单为空");
             response.put("code", 200);
             response.put("msg", "用户为空");
             return response;

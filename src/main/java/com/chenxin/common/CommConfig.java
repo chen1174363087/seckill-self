@@ -8,4 +8,5 @@ package com.chenxin.common;
 public class CommConfig {
     public static final String SEC_KILL_STOCK = "seckillStock";
     public static final long SEC_KILL_PRODUCT_ID = 1L;
+    public static final String TOKEN = "token";
 }
