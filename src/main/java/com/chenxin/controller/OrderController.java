@@ -7,6 +7,7 @@ import com.chenxin.entity.CxUser;
 import com.chenxin.mq.seckill.Producer;
 import com.chenxin.service.IOrderService;
 import com.chenxin.util.JwtUtils;
+import com.chenxin.util.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -44,6 +46,9 @@ public class OrderController {
     @Autowired
     private Producer producer;
 
+    @Autowired
+    private RedisUtils redisUtils;
+
     @PostMapping("/create")
     public Response createOrder(HttpServletRequest request, @RequestBody CxOrder cxOrder) {
         Response response = new Response();
@@ -62,10 +67,10 @@ public class OrderController {
             response.put("msg", "订单信息用户名错误");
             return response;
         }
-        producer.buildCreateOrder(cxOrder);
 
+        String msg = producer.buildCreateOrder(cxOrder);
         response.put("code", 200);
-        response.put("msg", "申请成功，排队中...");
+        response.put("msg", msg);
         return response;
     }
 
@@ -96,9 +101,10 @@ public class OrderController {
             return response;
         }
 
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("username", cxUser.getUsername());
-        List<CxOrder> cxOrders = orderService.list(queryWrapper);
+        String orderKey = new StringBuilder("seckill：")
+                .append(cxUser.getUsername())
+                .append(cxUser.getTelphone()).toString();
+        Set<String> cxOrders = redisUtils.smembers(orderKey);
 
         response.put("code", 200);
         response.put("msg", "success");

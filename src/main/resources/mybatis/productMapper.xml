@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenxin.dao.CxProductMapper">
+    <select id="getByIdForUpdate" parameterType="java.lang.Long" resultType="com.chenxin.entity.CxProduct">
+       SELECT * FROM `cx_product`
+       WHERE id = #{id}
+       FOR UPDATE
+   </select>
+</mapper>

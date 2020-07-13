@@ -9,27 +9,26 @@ import java.util.Date;
 
 /**
  * <p>
- * 用户表
+ * 产品表
  * </p>
  *
  * @author chenxin
- * @since 2020-07-03
+ * @since 2020-07-13
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class CxUser implements Serializable {
+public class CxProduct implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
-    private String username;
-
-    private String password;
-
-    private String telphone;
+    private String describle;
 
     private Date createTime;
+
+    private Integer stock;
+
 
 }

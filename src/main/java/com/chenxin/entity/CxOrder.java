@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 
 /**
@@ -18,7 +19,6 @@ import java.util.Date;
  * @since 2020-07-03
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class CxOrder implements Serializable {
 
@@ -38,5 +38,24 @@ public class CxOrder implements Serializable {
 
     private Date createTime;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        CxOrder cxOrder = (CxOrder) o;
+        return Objects.equals(id, cxOrder.id) &&
+                Objects.equals(productId, cxOrder.productId) &&
+                Objects.equals(username, cxOrder.username) &&
+                Objects.equals(telphone, cxOrder.telphone) &&
+                Objects.equals(address, cxOrder.address) &&
+                Objects.equals(status, cxOrder.status) &&
+                Objects.equals(createTime, cxOrder.createTime);
+    }
 
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), id, productId, username, telphone, address, status, createTime);
+    }
 }
