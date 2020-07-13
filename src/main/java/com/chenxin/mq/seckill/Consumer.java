@@ -113,8 +113,11 @@ public class Consumer {
             String orderKey = new StringBuilder("seckill：")
                     .append(cxOrder.getUsername())
                     .append(cxOrder.getTelphone()).toString();
-            redisUtils.srem(orderKey, JSON.toJSONString(oldOrder));
-            redisUtils.sadd(orderKey, JSON.toJSONString(cxOrder));
+            long deleteNum = redisUtils.srem(orderKey, JSON.toJSONString(oldOrder));
+            //在自动取消前可能已支付或者未支付
+            if (deleteNum > 0) {//deleteNum > 0 未支付
+                redisUtils.sadd(orderKey, JSON.toJSONString(cxOrder));
+            }
             //向redis加入数据
 //            jedisCluster.lpush("order_list", cxOrder.toString());
 

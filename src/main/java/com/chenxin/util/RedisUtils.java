@@ -43,7 +43,7 @@ public class RedisUtils {
 
     public Long srem(String key, String... members) {
         Jedis jedis = this.getJedis();
-        return jedis.srem(key, members);
+        return jedis.srem(key, members);//被成功移除的元素的数量
     }
 
     public Set<String> smembers(String key, String... members) {

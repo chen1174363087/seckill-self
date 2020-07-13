@@ -38,7 +38,7 @@ public class SecKillTest {
                 cxOrder.setUsername("seckill_" + j);
                 cxOrder.setAddress("地址：seckill_" + j);
                 cxOrder.setProductId(CommConfig.SEC_KILL_PRODUCT_ID);
-                cxOrder.setTelphone("123456_" + j);
+                cxOrder.setTelphone("_123456_" + j);
 
                 try {
                     countDownLatch.await();
