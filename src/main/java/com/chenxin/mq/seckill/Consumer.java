@@ -49,15 +49,17 @@ public class Consumer {
         try {
             CxOrder cxOrder = json2Order(message);
             //查mysql库存-创建订单-减库存 一个事物中执行
-            orderService.createOrder(cxOrder);
-            logger.info("MQ 创建订单success, username：{}", cxOrder.getUsername());
-            //自动取消订单死信队列
-            producer.buildAutoCancelOrder(cxOrder);
-            //将用户订单信息存redis，供用户查询
-            String orderKey = new StringBuilder("seckill：")
-                    .append(cxOrder.getUsername())
-                    .append(cxOrder.getTelphone()).toString();
-            redisUtils.sadd(orderKey, JSON.toJSONString(cxOrder));
+            boolean created = orderService.createOrder(cxOrder);
+            logger.info("MQ 创建订单结果：{}, username：{}", created, cxOrder.getUsername());
+            if (created) {
+                //自动取消订单死信队列
+                producer.buildAutoCancelOrder(cxOrder);
+                //将用户订单信息存redis，供用户查询
+                String orderKey = new StringBuilder("seckill：")
+                        .append(cxOrder.getUsername())
+                        .append(cxOrder.getTelphone()).toString();
+                redisUtils.sadd(orderKey, JSON.toJSONString(cxOrder));
+            }
 
             /**
              * 第一个参数 deliveryTag：就是接受的消息的deliveryTag,可以通过msg.getMessageProperties().getDeliveryTag()获得

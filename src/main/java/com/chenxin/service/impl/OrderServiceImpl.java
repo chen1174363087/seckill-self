@@ -1,6 +1,5 @@
 package com.chenxin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chenxin.common.CommConfig;
 import com.chenxin.dao.OrderMapper;
@@ -52,7 +51,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, CxOrder> implemen
      */
     @Override
     @Transactional
-    public void createOrder(CxOrder cxOrder) {
+    public boolean createOrder(CxOrder cxOrder) {
         /**
          * redis事物没有原子性，这种查库存-创建下单消息-减库存解决不了超卖问题，
          * 还是用mysql：查库存-创建订单-减库存在一个事物中
@@ -74,16 +73,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, CxOrder> implemen
 //        //减库存
 //        redisUtils.set(CommConfig.SEC_KILL_STOCK, String.valueOf(stock - 1));
 
+        boolean result = false;
+
         //库存（排它锁）
         CxProduct product = productService.getByIdForUpdate(CommConfig.SEC_KILL_PRODUCT_ID);
         LOGGER.info("秒杀库存：{}", product);
         if (product == null) {
-            return;
+            return result;
         }
 
         int stock = product.getStock();
         if (stock < 1) {
-            return;
+            return result;
         }
 
         //创建订单
@@ -94,6 +95,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, CxOrder> implemen
         productService.updateById(product);
         // 更新一下redis库存
         redisUtils.set(CommConfig.SEC_KILL_STOCK, String.valueOf(stock));
+
+        result = true;
+        return result;
     }
 
     @Override

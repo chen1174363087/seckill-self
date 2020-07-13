@@ -14,7 +14,7 @@ import java.util.List;
  * @since 2020-07-03
  */
 public interface IOrderService extends IService<CxOrder> {
-    void createOrder(CxOrder cxOrder);
+    boolean createOrder(CxOrder cxOrder);
 
     int insertBatchSelf(List<CxOrder> entities) throws Exception;
 }
